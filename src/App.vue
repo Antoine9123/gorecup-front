@@ -22,5 +22,11 @@ body{
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+  background-color: #FCFFF7;
+}
+
+::selection {
+  background-color: #2364aa; /* Couleur de fond de la sélection */
+  color: #fcfff7; /* Couleur du texte sélectionné */
 }
 </style>

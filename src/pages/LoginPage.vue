@@ -52,7 +52,6 @@ body {
   align-items: center;
   min-height: 100vh;
   background-color: #FCFFF7;
-  border: black 1px solid;
 }
 
 .login-container {
@@ -106,6 +105,11 @@ button {
   border: none;
   cursor: pointer;
   outline: none; 
+  transition: opacity 0.5s ease;
+}
+
+button:hover {
+  opacity: 0.8; 
 }
 
 
