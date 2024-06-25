@@ -37,7 +37,6 @@
           password: this.password
         });
 
-        // Assuming response.data.tokens.access and response.data.tokens.refresh are your tokens
         const accessToken = response.data.tokens.access;
         const refreshToken = response.data.tokens.refresh;
 

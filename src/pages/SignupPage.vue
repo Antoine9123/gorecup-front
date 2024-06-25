@@ -23,6 +23,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
 export default {
   name: "SignupForm",
   data() {
@@ -33,15 +36,47 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      if (this.password !== this.confirmPassword) {
-        alert("Passwords do not match");
-        return;
-      }
+    async submitSignupRequest() {
+      try {
+        await axios.post('https://gorecup-back-114fb5f55ba8.herokuapp.com/auth/signup/', {
+          username: this.username,
+          password: this.password,
+        });
+        const response = await axios.post('https://gorecup-back-114fb5f55ba8.herokuapp.com/auth/login/', {
+          username: this.username,
+          password: this.password
+        });
 
-      console.log("Username:", this.username);
-      console.log("Password:", this.password);
+        console.log('Signup successful!');
+
+        const accessToken = response.data.tokens.access;
+        const refreshToken = response.data.tokens.refresh;
+
+        Cookies.set('access_token', accessToken, { expires: 1 }); 
+        Cookies.set('refresh_token', refreshToken, { expires: 7 }); 
+
+        console.log("Cookies are set ! User is logged !")
+        
+        this.$router.push('/');
+        
+      } catch (error) {
+        console.error('Error during signup:', error);
+        
+      }
     },
+    handleSubmit() {
+    if (this.password !== this.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    if (this.password.length < 8) {
+      alert("Password must be at least 8 characters long");
+      return;
+    }
+
+    this.submitSignupRequest();
+  },
   },
 };
 </script>
