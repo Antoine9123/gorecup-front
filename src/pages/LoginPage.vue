@@ -17,7 +17,11 @@
   </template>
   
   <script>
+  import axios from 'axios';
+  import Cookies from 'js-cookie';
+
   export default {
+    
     name: 'LoginPage',
     data() {
       return {
@@ -26,13 +30,34 @@
       };
     },
     methods: {
-      handleLogin() {
-        // Handle login logic here
-        console.log('Logging in with', this.username, this.password);
-        // You can use a service to handle authentication
+      async handleLogin() {
+      try {
+        const response = await axios.post('https://gorecup-back-114fb5f55ba8.herokuapp.com/auth/login/', {
+          username: this.username,
+          password: this.password
+        });
+
+        // Assuming response.data.tokens.access and response.data.tokens.refresh are your tokens
+        const accessToken = response.data.tokens.access;
+        const refreshToken = response.data.tokens.refresh;
+
+        Cookies.set('access_token', accessToken, { expires: 1 }); 
+        Cookies.set('refresh_token', refreshToken, { expires: 7 }); 
+
+        console.log('Login successful!', response.data);
+        console.log('Access Token:', accessToken);
+        console.log('Refresh Token:', refreshToken);
+
+        
+        this.$router.push('/'); 
+
+      } catch (error) {
+        console.error('Error during login:', error);
+        // Handle error (e.g., show error message to the user)
       }
     }
-  };
+  }
+};
   </script>
 
 <style scoped>
